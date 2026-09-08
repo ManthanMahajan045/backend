@@ -1,0 +1,14 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /hazards/{hazardId} {
+      allow read: if true;
+      allow create: if request.auth != null;
+      allow update: if request.auth != null &&
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'upvotes']) &&
+        request.resource.data.upvotes == resource.data.upvotes + 1 &&
+        (request.resource.data.status == 'verified' ? request.resource.data.upvotes >= 3 : true);
+      allow delete: if false;
+    }
+  }
+}
