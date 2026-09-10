@@ -11,7 +11,7 @@ export default function UpvoteButton({ reportId, initialUpvotes = 0 }: { reportI
     if (loading) return;
     setLoading(true);
     setError(null);
-    const reportRef = doc(db, "hazards", reportId);
+    const reportRef = doc(db, "reports", reportId);
     try {
       const newUpvotes = await runTransaction(db, async (transaction) => {
         const reportDoc = await transaction.get(reportRef);
